@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "benchmark"
+require "./solution.rb"
+Dir["./day*.rb"].each {|file| require file }
+
+day = ARGV.first || "day#{Time.now.day}"
+
+benchmark = Benchmark.realtime do
+  input = File.readlines("data/#{day}.txt").map(&:strip)
+  solution = Solution.for(day, input)
+
+  puts("Solution for #{day}")
+  puts("- Part 1: #{solution.part_one}")
+  puts("- Part 2: #{solution.part_two}")
+end
+
+puts "Total execution time: #{benchmark.round(3)} seconds"

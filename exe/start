@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+YEAR = 2024
+
+token = ENV.fetch('AOC_SESSION_TOKEN') do
+  print "Session token not found. Enter session token: "
+  input = STDIN.gets.chomp
+  ENV.store('AOC_SESSION_TOKEN', input)
+  input
+end
+
+template = <<~TEMPLATE
+  # frozen_string_literal: true
+
+  require "./solution.rb"
+  
+  class DAY < Solution
+    def part_one
+      @input
+    end
+
+    def part_two
+    end
+  end
+TEMPLATE
+
+day = ARGV.first || "day#{Time.now.day}"
+day_num = day.gsub("day", "")
+
+source_path = "#{day}.rb"
+if File.exist?(source_path)
+  puts "✅ Source file for #{day} already created"
+else
+  `echo '#{template}' | sed s/DAY/#{day.capitalize}/ > #{source_path}`
+  puts "🎄 Created #{source_path}"
+end
+
+# Create a new input file
+input_path = "data/#{day}.txt"
+if File.exist?(input_path)
+  puts "✅ Input file for #{day} already created"
+else
+  `curl --header 'cookie: session=#{token}' -o #{input_path} https://adventofcode.com/#{YEAR}/day/#{day_num}/input`
+  puts "🎄 Created #{input_path}"
+end
+
+puts "Opening #{day} page..."
+`open https://adventofcode.com/#{YEAR}/day/#{day_num}`
+
