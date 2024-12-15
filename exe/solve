@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+day = ARGV.first || "day#{Time.now.day}"
+
 require "benchmark"
 require "./solution.rb"
-Dir["./day*.rb"].each {|file| require file }
-
-day = ARGV.first || "day#{Time.now.day}"
+require "./#{day}"
 
 benchmark = Benchmark.realtime do
   input = File.readlines("data/#{day}.txt").map(&:strip)
